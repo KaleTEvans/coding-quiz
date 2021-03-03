@@ -23,9 +23,15 @@ or start the quiz.
 var quizBox = document.querySelector("#quiz-content");
 // quiz time variable
 var timer = 60;
-
 // question number counter
 var i = 0;
+// declare answer choice variable
+var answerChoice;
+// variable to score player's score
+var playerScore = 0;
+
+var answerResult;
+
 
 var questionOne = {
     question: "Which of the following is the correct name of the loop that loops through a block of code a specified number of times in JavaScript?",
@@ -60,7 +66,7 @@ var questionFormEl = function() {
 
     // create question text element
     var questionTextEl = document.createElement("div");
-    questionTextEl.className = "questionEl";
+    questionTextEl.className = "question";
     questionTextEl.innerHTML = "<h2 class='question'>" + questionArray[i].question + "</h2>";
 
     quizBox.appendChild(questionTextEl);
@@ -100,6 +106,12 @@ var questionFormEl = function() {
 
     quizBox.appendChild(answerContainerEl);
 
+    // add element to tell player if choice was right or wrong
+    answerResult = document.createElement("div");
+    answerResult.className = "answer-result";
+
+    quizBox.appendChild(answerResult);
+
 }; 
 
 // function to load question upon button click
@@ -128,8 +140,6 @@ var quizTimer = function() {
     // console.log(timer);
 };
 
-//quizBox.addEventListener("click", firstQuestionLoad); 
-
 // button handler function
 var buttonHandler = function(event) {
     // get target element from event
@@ -142,21 +152,67 @@ var buttonHandler = function(event) {
     }
     // choice one was chosen
     if (targetEl.matches(".btn-one")) {
-        var answerChoice = targetEl.getAttribute("id");
-        console.log(answerChoice);
+        answerChoice = targetEl.getAttribute("id");
+        // call rightOrWrong function
+        rightOrWrong();
     }
     if (targetEl.matches(".btn-two")) {
-        var answerChoice = targetEl.getAttribute("id");
-        console.log(answerChoice);
+        answerChoice = targetEl.getAttribute("id");
+        rightOrWrong();
     }
     if (targetEl.matches(".btn-three")) {
-        var answerChoice = targetEl.getAttribute("id");
-        console.log(answerChoice);
+        answerChoice = targetEl.getAttribute("id");
+        rightOrWrong();
     }
     if (targetEl.matches(".btn-four")) {
-        var answerChoice = targetEl.getAttribute("id");
-        console.log(answerChoice);
+        answerChoice = targetEl.getAttribute("id");
+        rightOrWrong();
     }
 };
+
+// function to determine if choice was right or wrong
+var rightOrWrong = function() {
+    // compare answer choice variable to correct object
+    if (answerChoice === questionArray[i].correct) {
+        window.alert("That is correct!");
+        // remove question element
+        var questionBox = document.querySelector(".question");
+        questionBox.remove();
+        // remove answer choices
+        var answerBox = document.querySelector(".answer-choices");
+        answerBox.remove();
+        // remove results text
+        var resultsBox = document.querySelector(".answer-result");
+        resultsBox.remove();
+        // increment the question array to load next quesiton
+        i++;
+        // add a point to player score
+        playerScore++;
+        // call function to load new question
+        questionFormEl();
+        // insert text at bottom to notify user answer is correct
+        answerResult.innerHTML = "<h3 class='result'>Correct!</h3>";
+    }
+    else {
+        window.alert("Wrong!");
+        // remove 5 seconds from the timer
+        timer = timer - 5;
+        // remove question element
+        var questionBox = document.querySelector(".question");
+        questionBox.remove();
+        // remove answer choices
+        var answerBox = document.querySelector(".answer-choices");
+        answerBox.remove();
+        // remove results text
+        var resultsBox = document.querySelector(".answer-result");
+        resultsBox.remove();
+        // increment the question array to load next quesiton
+        i++;
+        // call function to load new question
+        questionFormEl();
+        // insert text at bottom to notify user answer is incorrect
+        answerResult.innerHTML = "<h3 class='result'>Incorrect!</h3>";
+    }
+}
 
 quizBox.addEventListener("click", buttonHandler);
