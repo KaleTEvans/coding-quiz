@@ -24,6 +24,9 @@ var quizBox = document.querySelector("#quiz-content");
 // quiz time variable
 var timer = 60;
 
+// question number counter
+var i = 0;
+
 var questionOne = {
     question: "Which of the following is the correct name of the loop that loops through a block of code a specified number of times in JavaScript?",
     choiceOne: "while",
@@ -49,7 +52,7 @@ var questionThree = {
     choiceThree: "/* */ or <!-- -->",
     choiceFour: "// or <>",
     correct: "// or /* */"
-}
+};
 
 var questionArray = [questionOne, questionTwo, questionThree];
 
@@ -58,7 +61,7 @@ var questionFormEl = function() {
     // create question text element
     var questionTextEl = document.createElement("div");
     questionTextEl.className = "questionEl";
-    questionTextEl.innerHTML = "<h2 class='question'>" + questionArray[0].question + "</h2>";
+    questionTextEl.innerHTML = "<h2 class='question'>" + questionArray[i].question + "</h2>";
 
     quizBox.appendChild(questionTextEl);
 
@@ -67,49 +70,44 @@ var questionFormEl = function() {
     answerContainerEl.className = "answer-choices";
 
     var answerChoiceOne = document.createElement("button");
-    answerChoiceOne.textContent = questionOne.choiceOne;
-    answerChoiceOne.className = "btn";
+    answerChoiceOne.textContent = questionArray[i].choiceOne;
+    answerChoiceOne.className = "btn btn-one";
     // set button id as answer choice to compare to the correct value
-    answerChoiceOne.setAttribute("id", questionOne.choiceOne);
+    answerChoiceOne.setAttribute("id", questionArray[i].choiceOne);
 
     answerContainerEl.appendChild(answerChoiceOne);
 
     var answerChoiceTwo = document.createElement("button");
-    answerChoiceTwo.textContent = questionOne.choiceTwo;
-    answerChoiceTwo.className = "btn";
-    answerChoiceTwo.setAttribute("id", questionOne.choiceTwo);
+    answerChoiceTwo.textContent = questionArray[i].choiceTwo;
+    answerChoiceTwo.className = "btn btn-two";
+    answerChoiceTwo.setAttribute("id", questionArray[i].choiceTwo);
 
     answerContainerEl.appendChild(answerChoiceTwo);
 
     var answerChoiceThree = document.createElement("button");
-    answerChoiceThree.textContent = questionOne.choiceThree;
-    answerChoiceThree.className = "btn";
-    answerChoiceThree.setAttribute("id", questionOne.choiceThree);
+    answerChoiceThree.textContent = questionArray[i].choiceThree;
+    answerChoiceThree.className = "btn btn-three";
+    answerChoiceThree.setAttribute("id", questionArray[i].choiceThree);
 
     answerContainerEl.appendChild(answerChoiceThree);
 
     var answerChoiceFour = document.createElement("button");
-    answerChoiceFour.textContent = questionOne.choiceFour;
-    answerChoiceFour.className = "btn";
-    answerChoiceFour.setAttribute("id", questionOne.choiceFour);
+    answerChoiceFour.textContent = questionArray[i].choiceFour;
+    answerChoiceFour.className = "btn btn-four";
+    answerChoiceFour.setAttribute("id", questionArray[i].choiceFour);
 
     answerContainerEl.appendChild(answerChoiceFour);
 
     quizBox.appendChild(answerContainerEl);
 
-} 
+}; 
 
 // function to load question upon button click
-var firstQuestionLoad = function(event) {
+var firstQuestionLoad = function() {
 
-    event.preventDefault();
     // remove initial quiz info elements from question box
     var quizInfoBox = document.querySelector(".quiz-box");
-    quizInfoBox.remove()
-
-    // create quiz elements
-    var quizContainerEl = document.createElement("div");
-    quizContainerEl.className = "quiz-box"; 
+    quizInfoBox.remove();
 
     questionFormEl();
     quizTimer();
@@ -127,9 +125,38 @@ var quizTimer = function() {
             quizTimer();
         }
     }, 1000)
-    console.log(timer);
-}
+    // console.log(timer);
+};
 
-quizBox.addEventListener("submit", firstQuestionLoad); 
+//quizBox.addEventListener("click", firstQuestionLoad); 
 
-// function to determine if the user selected the correct answer
+// button handler function
+var buttonHandler = function(event) {
+    // get target element from event
+    event.preventDefault();
+    var targetEl = event.target;
+
+    // if start quiz is selected, run first question function
+    if (targetEl.matches("#quiz-answer")) {
+        firstQuestionLoad(event);
+    }
+    // choice one was chosen
+    if (targetEl.matches(".btn-one")) {
+        var answerChoice = targetEl.getAttribute("id");
+        console.log(answerChoice);
+    }
+    if (targetEl.matches(".btn-two")) {
+        var answerChoice = targetEl.getAttribute("id");
+        console.log(answerChoice);
+    }
+    if (targetEl.matches(".btn-three")) {
+        var answerChoice = targetEl.getAttribute("id");
+        console.log(answerChoice);
+    }
+    if (targetEl.matches(".btn-four")) {
+        var answerChoice = targetEl.getAttribute("id");
+        console.log(answerChoice);
+    }
+};
+
+quizBox.addEventListener("click", buttonHandler);
