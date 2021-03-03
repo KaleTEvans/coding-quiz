@@ -21,17 +21,17 @@
         </div>
     </header>
 
-    <main class="page-content" id="page-content">
+    <form class="quiz-content" id="quiz-content">
         <!-- initial box for quiz questions -->
-        <h2 class="question">Begin the Quiz</h2>
-        <p class="initial-pg-content">Welcome to the coding quiz! The following quiz contains multiple choice questions about JavaScript fundamentals. The quiz will be timed at 60 seconds long to answer 10 questions. Press the button below to begin. Good luck!</p>
-
         <div class="quiz-box">
-            <ul class="answer-choices" id="answer-choices">
-                <button class="btn" id="quiz-answer">Start Quiz</button>
-            </ul> 
+            <h2 class="question">Begin the Quiz</h2>
+            <p class="initial-pg-content">Welcome to the coding quiz! The following quiz contains multiple choice questions about JavaScript fundamentals. The quiz will be timed at 60 seconds long to answer 10 questions. If a wrong answer is selected, 5 seconds will be deducted from the timer. Press the button below to begin. Good luck!</p>
+
+            <div class="answer-choices" id="answer-choices">
+                <button class="btn" id="quiz-answer" type="submit">Start Quiz</button>
+            </div> 
         </div>
-    </main>
+    </form>
     
     <script src="./assets/java/script.js"></script>
 </body>
