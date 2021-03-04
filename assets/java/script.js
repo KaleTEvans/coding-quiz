@@ -172,9 +172,9 @@ var buttonHandler = function(event) {
 
 // function to determine if choice was right or wrong
 var rightOrWrong = function() {
+
     // compare answer choice variable to correct object
     if (answerChoice === questionArray[i].correct) {
-        window.alert("That is correct!");
         // remove question element
         var questionBox = document.querySelector(".question");
         questionBox.remove();
@@ -185,17 +185,22 @@ var rightOrWrong = function() {
         var resultsBox = document.querySelector(".answer-result");
         resultsBox.remove();
         // increment the question array to load next quesiton
-        i++;
+        i++; 
         // add a point to player score
         playerScore++;
-        // call function to load new question
-        questionFormEl();
+        // once i reaches the full length of the question array, call the end page function
+        if (i < questionArray.length) {
+            // call function to load new question
+            questionFormEl();
+        }
+        else {
+            quizEndPage();
+        }
         // insert text at bottom to notify user answer is correct
         answerResult.innerHTML = "<h3 class='result'>Correct!</h3>";
+        
     }
     else {
-        window.alert("Wrong!");
-        // remove 5 seconds from the timer
         timer = timer - 5;
         // remove question element
         var questionBox = document.querySelector(".question");
@@ -208,11 +213,23 @@ var rightOrWrong = function() {
         resultsBox.remove();
         // increment the question array to load next quesiton
         i++;
-        // call function to load new question
-        questionFormEl();
+        // once i reaches the full length of the question array, call the end page function
+        if (i < questionArray.length) {
+           // call function to load new question
+           questionFormEl();
+        }
+        else {
+            quizEndPage();
+        }
         // insert text at bottom to notify user answer is incorrect
         answerResult.innerHTML = "<h3 class='result'>Incorrect!</h3>";
-    }
+    }   
+    console.log("player score is " + playerScore);
+}
+
+// function to open end of quiz interface
+var quizEndPage = function() {
+    
 }
 
 quizBox.addEventListener("click", buttonHandler);
