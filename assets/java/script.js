@@ -16,11 +16,13 @@ or start the quiz.
         every time the selected answer returns false
             3a. exit the function and skip to the results page once the timer reaches zero
             3b. reset the timer each time the initial page is loaded
-    6. Load a results page once all questions are completed or once the timer runs out 
+    6. Load results once all questions are completed or once the timer runs out 
 
 */
-
+var header = document.querySelector("header");
+var body = document.querySelector("body");
 var quizBox = document.querySelector("#quiz-content");
+var quizInfoBox = document.querySelector(".quiz-box");
 // quiz time variable
 var timer = 60;
 // question number counter
@@ -120,7 +122,6 @@ var questionFormEl = function() {
 var firstQuestionLoad = function() {
 
     // remove initial quiz info elements from question box
-    var quizInfoBox = document.querySelector(".quiz-box");
     quizInfoBox.remove();
 
     questionFormEl();
@@ -182,6 +183,14 @@ var buttonHandler = function(event) {
     if (targetEl.matches(".btn-four")) {
         answerChoice = targetEl.getAttribute("id");
         rightOrWrong();
+    }
+    // if view high score button is selected, go to high score page
+    if (targetEl.matches(".high-score")) {
+        highScorePage();
+    }
+    // once final submit button is selected, go to high score page
+    if (targetEl.matches(".submit")) {
+        highScorePage();
     }
 };
 
@@ -255,12 +264,42 @@ var quizEndPage = function() {
 
     quizBox.appendChild(userInfo);
 
+    // create button to submit score
+    var submitButton = document.createElement("div");
+    submitButton.className = "submit-button";
+    submitButton.innerHTML = "<button class='btn submit' id='save-score' type='submit'>Submit Score</button>";
+
+    quizBox.appendChild(submitButton);
+
     // add answerResult element to display last question answer
     answerResult = document.createElement("div");
     answerResult.className = "answer-result";
 
     quizBox.appendChild(answerResult);
 
+};
+
+// this function will store the user's score
+
+// this function will load the high score page
+var highScorePage = function() {
+    // remove header element
+    header.remove();
+    // remove body elements
+    quizBox.remove();
+    // create new body element
+    var highScoreEl = document.createElement("div");
+    highScoreEl.className = "quiz-content";
+
+    var highScoreTitle = document.createElement("h2");
+    highScoreTitle.className = "question";
+    highScoreTitle.innerHTML = "High Scores";
+    highScoreEl.appendChild(highScoreTitle);
+
+    // append to body
+    body.appendChild(highScoreEl);
+
 }
 
+header.addEventListener("click", buttonHandler);
 quizBox.addEventListener("click", buttonHandler);
