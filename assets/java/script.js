@@ -29,8 +29,10 @@ var i = 0;
 var answerChoice;
 // variable to score player's score
 var playerScore = 0;
-
+// variable to store answer for each question
 var answerResult;
+// object to store user data
+var userData = [];
 
 
 var questionOne = {
@@ -67,7 +69,7 @@ var questionFormEl = function() {
     // create question text element
     var questionTextEl = document.createElement("div");
     questionTextEl.className = "question";
-    questionTextEl.innerHTML = "<h2 class='question'>" + questionArray[i].question + "</h2>";
+    questionTextEl.innerHTML = "<h2 class='question-title'>" + questionArray[i].question + "</h2>";
 
     quizBox.appendChild(questionTextEl);
 
@@ -125,7 +127,7 @@ var firstQuestionLoad = function() {
     quizTimer();
 }; 
 
-// funciton to begin timer once user gets to first question
+// function to begin timer once user gets to first question
 var quizTimer = function() {
     
     // function to count down
@@ -133,11 +135,24 @@ var quizTimer = function() {
         timer--;
         var timeLeft = document.querySelector("#timer");
         timeLeft.innerText = timer;
+        // end timer if all quesitons are answered
+        if (i === questionArray.length) {
+            return timer;
+        }
+        // continue to run function if timer is greater than 0
         if (timer > 0) {
             quizTimer();
         }
+        // quit to end page once timer is up
+        if (timer <= 0) {
+            window.alert("Sorry! Your time is up.");
+            questionPageHandler();
+            return timer;
+        }
     }, 1000)
-    // console.log(timer);
+    console.log(timer);
+    
+    
 };
 
 // button handler function
@@ -175,61 +190,77 @@ var rightOrWrong = function() {
 
     // compare answer choice variable to correct object
     if (answerChoice === questionArray[i].correct) {
-        // remove question element
-        var questionBox = document.querySelector(".question");
-        questionBox.remove();
-        // remove answer choices
-        var answerBox = document.querySelector(".answer-choices");
-        answerBox.remove();
-        // remove results text
-        var resultsBox = document.querySelector(".answer-result");
-        resultsBox.remove();
-        // increment the question array to load next quesiton
-        i++; 
         // add a point to player score
         playerScore++;
-        // once i reaches the full length of the question array, call the end page function
-        if (i < questionArray.length) {
-            // call function to load new question
-            questionFormEl();
-        }
-        else {
-            quizEndPage();
-        }
+        // run questionPageHandler to generate new question
+        questionPageHandler();
         // insert text at bottom to notify user answer is correct
-        answerResult.innerHTML = "<h3 class='result'>Correct!</h3>";
-        
+        answerResult.innerHTML = "<h3 class='result'>Correct!</h3>";  
     }
     else {
+        // set timer back as a penalty for wrong answer
         timer = timer - 5;
-        // remove question element
-        var questionBox = document.querySelector(".question");
-        questionBox.remove();
-        // remove answer choices
-        var answerBox = document.querySelector(".answer-choices");
-        answerBox.remove();
-        // remove results text
-        var resultsBox = document.querySelector(".answer-result");
-        resultsBox.remove();
-        // increment the question array to load next quesiton
-        i++;
-        // once i reaches the full length of the question array, call the end page function
-        if (i < questionArray.length) {
-           // call function to load new question
-           questionFormEl();
-        }
-        else {
-            quizEndPage();
-        }
+        // run questionPageHandler to generate new question
+        questionPageHandler();
         // insert text at bottom to notify user answer is incorrect
         answerResult.innerHTML = "<h3 class='result'>Incorrect!</h3>";
     }   
     console.log("player score is " + playerScore);
-}
+};
+
+// question page handler function
+// this function will handle question transitions
+var questionPageHandler = function() {
+    // remove question element
+    var questionBox = document.querySelector(".question");
+    questionBox.remove();
+    // remove answer choices
+    var answerBox = document.querySelector(".answer-choices");
+    answerBox.remove();
+    // remove results text
+    var resultsBox = document.querySelector(".answer-result");
+    resultsBox.remove();
+    // increment the question array to load next quesiton
+    i++; 
+    // once i reaches the full length of the question array, call the end page function
+    if (i < questionArray.length && timer > 0) {
+       // call function to load new question
+       questionFormEl();
+    }
+    else {
+       quizEndPage();
+    }
+};
 
 // function to open end of quiz interface
 var quizEndPage = function() {
-    
+    // create question text element
+    var endPageEl = document.createElement("div");
+    endPageEl.className = "question";
+    endPageEl.innerHTML = "<h2 class='questiont-title'>All done!</h2>";
+
+    quizBox.appendChild(endPageEl);
+
+    // create div box for player score and input
+    var finalScore = document.createElement("h3");
+    finalScore.className = "player-score";
+    finalScore.innerHTML = "Your final score is " + playerScore;
+
+    quizBox.appendChild(finalScore);
+
+    // create form to have user enter their initials
+    var userInfo = document.createElement("div");
+    userInfo.className = "user-info";
+    userInfo.innerHTML = "<input type='text' name='user-initials' placeholder='Enter Initials to Save High Score' />";
+
+    quizBox.appendChild(userInfo);
+
+    // add answerResult element to display last question answer
+    answerResult = document.createElement("div");
+    answerResult.className = "answer-result";
+
+    quizBox.appendChild(answerResult);
+
 }
 
 quizBox.addEventListener("click", buttonHandler);
