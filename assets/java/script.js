@@ -29,13 +29,19 @@ var timer = 60;
 var i = 0;
 // declare answer choice variable
 var answerChoice;
-// variable to score player's score
+// variable to store player's score
 var playerScore = 0;
 // variable to store answer for each question
 var answerResult;
 // object to store user data
 var userData = [];
-
+// variable to attach an id to each user entry
+var userId = 1;
+// global variable for high score ul element
+var highScoreList;
+var savedScores;
+var scoreListEl;
+var playerObj;
 
 var questionOne = {
     question: "Which of the following is the correct name of the loop that loops through a block of code a specified number of times in JavaScript?",
@@ -126,6 +132,7 @@ var firstQuestionLoad = function() {
 
     questionFormEl();
     quizTimer();
+
 }; 
 
 // function to begin timer once user gets to first question
@@ -152,8 +159,6 @@ var quizTimer = function() {
         }
     }, 1000)
     console.log(timer);
-    
-    
 };
 
 // button handler function
@@ -190,7 +195,8 @@ var buttonHandler = function(event) {
     }
     // once final submit button is selected, go to high score page
     if (targetEl.matches(".submit")) {
-        highScorePage();
+        highScoreSaver();
+        // highScorePage();
     }
 };
 
@@ -279,10 +285,28 @@ var quizEndPage = function() {
 
 };
 
-// this function will store the user's score
+// this function will store the user's score in an object
+var highScoreSaver = function() {
+    var userInitials = document.querySelector("input[name='user-initials']").value;
+
+    // alert user if no initials are entered
+    if (!userInitials) {
+        alert("You need to enter your initials!") 
+        return false;
+    }
+
+    var playerObj = {
+        name: userInitials,
+        score: playerScore
+    };
+
+    highScorePage(playerObj);
+    scoreOrganizer(playerObj);
+
+};
 
 // this function will load the high score page
-var highScorePage = function() {
+var highScorePage = function(playerObj) {
     // remove header element
     header.remove();
     // remove body elements
@@ -296,10 +320,70 @@ var highScorePage = function() {
     highScoreTitle.innerHTML = "High Scores";
     highScoreEl.appendChild(highScoreTitle);
 
+    // create ul for high score list
+    highScoreList = document.createElement("ul");
+    highScoreList.className = "score-list";
+    highScoreEl.appendChild(highScoreList);
+
     // append to body
     body.appendChild(highScoreEl);
 
+    // loop through saved score array if one exists
+    if (!savedScores) {
+        return;
+    }
+    else {
+        for (var i=0; i < savedScores.length; i++) {
+            scoreOrganizer(savedScores[i]);
+        }
+    }
+    
+};
+
+// function to organize the high scores and loop them to fill in the high score list element
+var scoreOrganizer = function(playerObj) {
+    // set player id 
+    playerObj.id = userId;
+    userData.push(playerObj);
+    // save player input to local storage
+    saveScores();
+    //increase counter for next player input
+    userId++;
+    // create a list item for each score entry
+    scoreListEl = document.createElement("li");
+    scoreListEl.className = "score-entry";
+    // add score id as custom attribute
+    scoreListEl.setAttribute("user-id", playerObj.id);
+    scoreListEl.innerHTML = playerObj.id + ". " +  playerObj.name + " Score: " + playerObj.score;
+
+    highScoreList.appendChild(scoreListEl);
+
+};
+
+var saveScores = function() {
+    // save user data to local storage
+    localStorage.setItem("userData", JSON.stringify(userData));
+};
+
+var loadScores = function() {
+    savedScores = localStorage.getItem("userData");
+
+    if (!userData) {
+        return false;
+    }
+
+    savedScores = JSON.parse(savedScores);
+
+    console.log(savedScores);
+
+};
+
+// insert this into the go back button when its created
+var reset = function() {
+    location.reload();
 }
 
 header.addEventListener("click", buttonHandler);
 quizBox.addEventListener("click", buttonHandler);
+
+loadScores();
