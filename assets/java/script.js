@@ -20,7 +20,7 @@ or start the quiz.
 
 */
 var header = document.querySelector("header");
-var body = document.querySelector("body");
+
 var quizBox = document.querySelector("#quiz-content");
 var quizInfoBox = document.querySelector(".quiz-box");
 // quiz time variable
@@ -196,7 +196,13 @@ var buttonHandler = function(event) {
     // once final submit button is selected, go to high score page
     if (targetEl.matches(".submit")) {
         highScoreSaver();
-        // highScorePage();
+    }
+    if (targetEl.matches(".go-back")) {
+        location.reload();
+    }
+    if (targetEl.matches(".clear-scores")) {
+        localStorage.clear();
+        highScoreList.remove();
     }
 };
 
@@ -249,40 +255,45 @@ var questionPageHandler = function() {
 
 // function to open end of quiz interface
 var quizEndPage = function() {
-    // create question text element
+    // create div box for end page elements
     var endPageEl = document.createElement("div");
-    endPageEl.className = "question";
-    endPageEl.innerHTML = "<h2 class='questiont-title'>All done!</h2>";
+    endPageEl.className = "end-page";
 
-    quizBox.appendChild(endPageEl);
+    var endPageTitle = document.createElement("h2");
+    endPageTitle.className = "question";
+    endPageTitle.innerHTML = "All Done!";
+    endPageEl.appendChild(endPageTitle);
 
     // create div box for player score and input
     var finalScore = document.createElement("h3");
     finalScore.className = "player-score";
     finalScore.innerHTML = "Your final score is " + playerScore;
 
-    quizBox.appendChild(finalScore);
+    endPageEl.appendChild(finalScore);
 
     // create form to have user enter their initials
-    var userInfo = document.createElement("div");
-    userInfo.className = "user-info";
-    userInfo.innerHTML = "<input type='text' name='user-initials' placeholder='Enter Initials to Save High Score' />";
+    var userInfo = document.createElement("input");
+    userInfo.type = "text";
+    userInfo.name = "user-initials";
+    userInfo.placeholder = "Enter Initials to Save High Score";
 
-    quizBox.appendChild(userInfo);
+    endPageEl.appendChild(userInfo);
 
     // create button to submit score
-    var submitButton = document.createElement("div");
-    submitButton.className = "submit-button";
-    submitButton.innerHTML = "<button class='btn submit' id='save-score' type='submit'>Submit Score</button>";
+    var submitButton = document.createElement("button");
+    submitButton.className = "btn submit";
+    submitButton.id = "save-score";
+    submitButton.innerHTML = "Submit Score";
 
-    quizBox.appendChild(submitButton);
+    endPageEl.appendChild(submitButton);
 
     // add answerResult element to display last question answer
     answerResult = document.createElement("div");
     answerResult.className = "answer-result";
 
-    quizBox.appendChild(answerResult);
-
+    endPageEl.appendChild(answerResult);
+    // append all elements to quiz box
+    quizBox.appendChild(endPageEl);
 };
 
 // this function will store the user's score in an object
@@ -300,20 +311,22 @@ var highScoreSaver = function() {
         score: playerScore
     };
 
-    highScorePage(playerObj);
+    highScorePage();
     scoreOrganizer(playerObj);
 
 };
 
 // this function will load the high score page
-var highScorePage = function(playerObj) {
+var highScorePage = function() {
     // remove header element
     header.remove();
     // remove body elements
-    quizBox.remove();
+    var endPageBox = document.querySelector(".end-page");
+    endPageBox.remove();
     // create new body element
     var highScoreEl = document.createElement("div");
     highScoreEl.className = "quiz-content";
+    highScoreEl.id = "quiz-content";
 
     var highScoreTitle = document.createElement("h2");
     highScoreTitle.className = "question";
@@ -325,8 +338,23 @@ var highScorePage = function(playerObj) {
     highScoreList.className = "score-list";
     highScoreEl.appendChild(highScoreList);
 
-    // append to body
-    body.appendChild(highScoreEl);
+    // create button to go back
+    var goBackButton = document.createElement("button");
+    goBackButton.className = "btn go-back";
+    goBackButton.id = "go-back";
+    goBackButton.innerHTML = "Go Back to Quiz Start";
+    highScoreEl.appendChild(goBackButton);
+
+    // create a clear high scores button
+    var clearScoresButton = document.createElement("button");
+    clearScoresButton.className = "btn clear-scores";
+    clearScoresButton.id = "clear-scores";
+    clearScoresButton.innerHTML = "Click to Clear High Scores";
+    highScoreEl.appendChild(clearScoresButton);
+
+    // append to quizBox
+    quizBox.appendChild(highScoreEl);
+
 
     // loop through saved score array if one exists
     if (!savedScores) {
@@ -354,7 +382,7 @@ var scoreOrganizer = function(playerObj) {
     scoreListEl.className = "score-entry";
     // add score id as custom attribute
     scoreListEl.setAttribute("user-id", playerObj.id);
-    scoreListEl.innerHTML = playerObj.id + ". " +  playerObj.name + " Score: " + playerObj.score;
+    scoreListEl.innerHTML = playerObj.id + ". " +  playerObj.name + " - " + playerObj.score;
 
     highScoreList.appendChild(scoreListEl);
 
@@ -373,15 +401,7 @@ var loadScores = function() {
     }
 
     savedScores = JSON.parse(savedScores);
-
-    console.log(savedScores);
-
 };
-
-// insert this into the go back button when its created
-var reset = function() {
-    location.reload();
-}
 
 header.addEventListener("click", buttonHandler);
 quizBox.addEventListener("click", buttonHandler);
