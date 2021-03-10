@@ -37,11 +37,10 @@ var answerResult;
 var userData = [];
 // variable to attach an id to each user entry
 var userId = 1;
-// global variable for high score ul element
+// global variables for high score elements
 var highScoreList;
 var savedScores;
 var scoreListEl;
-var playerObj;
 
 var questionOne = {
     question: "Which of the following is the correct name of the loop that loops through a block of code a specified number of times in JavaScript?",
@@ -70,7 +69,70 @@ var questionThree = {
     correct: "// or /* */"
 };
 
-var questionArray = [questionOne, questionTwo, questionThree];
+var questionFour = {
+    question: "The ending of a JavaScript file contains this format:",
+    choiceOne: ".js",
+    choiceTwo: ".css",
+    choiceThree: ".html",
+    choiceFour: ".jpg",
+    correct: ".js"
+};
+
+var questionFive = {
+    question: "The object representation of a webpage is called the _____",
+    choiceOne: "Domain Orientation",
+    choiceTwo: "Document Object Manipulation",
+    choiceThree: "Domain Object Manipulation",
+    choiceFour: "Document Object Model",
+    correct: "Document Object Model"
+};
+
+var questionSix = {
+    question: "The correct syntax to log an element in the console is:",
+    choiceOne: "log()",
+    choiceTwo: "console.log()",
+    choiceThree: "console()",
+    choiceFour: "consolelog()",
+    correct: "console.log()"
+};
+
+var questionSeven = {
+    question: "To push a new element to the current array, arr = [1], the correct code is ____.",
+    choiceOne: "arr.push()",
+    choiceTwo: "arr.add()",
+    choiceThree: "push()",
+    choiceFour: "arr.new()",
+    correct: "arr.push()"
+};
+
+var questionEight = {
+    question: "What is the correct format for linking JavaScript code to an HTML file?",
+    choiceOne: "<java></java>",
+    choiceTwo: "<javaScript></javaScript>",
+    choiceThree: "<new></new>",
+    choiceFour: "<script></script>",
+    correct: "<script></script>"
+};
+
+var questionNine = {
+    question: "What is the correct name for a loop that loops through a block of code as long as a specified condition is true?",
+    choiceOne: "for",
+    choiceTwo: "if",
+    choiceThree: "else",
+    choiceFour: "while",
+    correct: "while"
+};
+
+var questionTen = {
+    question: "What are the two values represented by a boolean variable?",
+    choiceOne: "for and while",
+    choiceTwo: "greater than or less than",
+    choiceThree: "True or False",
+    choiceFour: "New and Old",
+    correct: "True or False"
+};
+
+var questionArray = [questionOne, questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven, questionEight, questionNine, questionTen];
 
 var questionFormEl = function() {
 
@@ -354,7 +416,6 @@ var highScorePage = function() {
 
     // append to quizBox
     quizBox.appendChild(highScoreEl);
-
 
     // loop through saved score array if one exists
     if (!savedScores) {
