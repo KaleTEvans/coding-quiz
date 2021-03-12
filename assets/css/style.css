@@ -36,7 +36,6 @@ h1 {
 }
 
 .quiz-content {
-    flex: 1;
     display: flex;
     flex-wrap: wrap;
     width: 75%;
@@ -67,8 +66,59 @@ h1 {
     margin: 0;
 }
 
+.answer-result {
+    margin: 10px 30%;
+    border-top: 1px double rgb(0,0,0,0.6);
+}
+
+.result {
+    text-align: center;
+}
+
 .btn {
-    background-color: darkgray;
+    background-color: rgb(97, 92, 196);
+    border-radius: 10px;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: blue;
+    font-size: 18px;
+    color: white;
+}
+
+.high-score {
+    margin: 15px 0 0 0;
+}
+
+.btn-one, .btn-two, .btn-three, .btn-four {
+    display: block;
+    margin: 5px auto;
+    width: 300px;
+    padding: 15px;
+}
+
+.score-list {
+    list-style: none;
+    text-align: center;
+    padding: 0;
+}
+
+.go-back, .clear-scores, .submit {
+    display: block;
+    margin: 5px auto;
+    width: 40%;
+}
+
+.player-score {
+    text-align: center;
+}
+
+.quiz-box input {
+    width: 40%;
+    margin: 5px auto;
 }
 
 

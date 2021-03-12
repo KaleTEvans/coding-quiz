@@ -253,15 +253,23 @@ var buttonHandler = function(event) {
     }
     // if view high score button is selected, go to high score page
     if (targetEl.matches(".high-score")) {
-        highScorePage();
+        if (timer < 60) {
+            window.alert("You must complete the quiz first!")
+            return false;
+        }
+        else {
+            highScorePage();
+        }
     }
     // once final submit button is selected, go to high score page
     if (targetEl.matches(".submit")) {
         highScoreSaver();
     }
+    // reset javascript when go back button has been selected
     if (targetEl.matches(".go-back")) {
         location.reload();
     }
+    // clear local storage if clear scores has been selected
     if (targetEl.matches(".clear-scores")) {
         localStorage.clear();
         highScoreList.remove();
@@ -318,20 +326,20 @@ var questionPageHandler = function() {
 // function to open end of quiz interface
 var quizEndPage = function() {
     // create div box for end page elements
-    var endPageEl = document.createElement("div");
-    endPageEl.className = "end-page";
+    quizInfoBox = document.createElement("div");
+    quizInfoBox.className = "quiz-box";
 
     var endPageTitle = document.createElement("h2");
     endPageTitle.className = "question";
     endPageTitle.innerHTML = "All Done!";
-    endPageEl.appendChild(endPageTitle);
+    quizInfoBox.appendChild(endPageTitle);
 
     // create div box for player score and input
     var finalScore = document.createElement("h3");
     finalScore.className = "player-score";
     finalScore.innerHTML = "Your final score is " + playerScore;
 
-    endPageEl.appendChild(finalScore);
+    quizInfoBox.appendChild(finalScore);
 
     // create form to have user enter their initials
     var userInfo = document.createElement("input");
@@ -339,7 +347,7 @@ var quizEndPage = function() {
     userInfo.name = "user-initials";
     userInfo.placeholder = "Enter Initials to Save High Score";
 
-    endPageEl.appendChild(userInfo);
+    quizInfoBox.appendChild(userInfo);
 
     // create button to submit score
     var submitButton = document.createElement("button");
@@ -347,15 +355,15 @@ var quizEndPage = function() {
     submitButton.id = "save-score";
     submitButton.innerHTML = "Submit Score";
 
-    endPageEl.appendChild(submitButton);
+    quizInfoBox.appendChild(submitButton);
 
     // add answerResult element to display last question answer
     answerResult = document.createElement("div");
     answerResult.className = "answer-result";
 
-    endPageEl.appendChild(answerResult);
+    quizInfoBox.appendChild(answerResult);
     // append all elements to quiz box
-    quizBox.appendChild(endPageEl);
+    quizBox.appendChild(quizInfoBox);
 };
 
 // this function will store the user's score in an object
@@ -382,9 +390,9 @@ var highScoreSaver = function() {
 var highScorePage = function() {
     // remove header element
     header.remove();
-    // remove body elements
-    var endPageBox = document.querySelector(".end-page");
-    endPageBox.remove();
+    // remove quiz box element
+    quizInfoBox.remove(); 
+
     // create new body element
     var highScoreEl = document.createElement("div");
     highScoreEl.className = "quiz-content";
